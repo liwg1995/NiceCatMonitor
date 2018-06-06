@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 18/6/6 下午3:08
 # @Author  : Wugang Li
-# @File    : zabbix_tool.py
+# @File    : zabbix_messages.py
 # @Software: PyCharm
 # @license : Copyright(C), olei.me
 # @Contact : i@olei.me
