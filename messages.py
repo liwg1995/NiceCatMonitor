@@ -98,4 +98,32 @@ class zabbix():
         except:
             logs.error("Error: %s" % (traceback.format_exc()))
 
+    # 检索历史数据
+    def history_get(self,itemid,time_from,time_till):
+        token = self.get_token()
+        data = {
+            "jsonrpc": "2.0",
+            "method": "history.get",
+            "params": {
+                "output": "extend",
+                "history": 0,
+                "itemids": itemid,
+                "sortfield": "clock",  # 基于时间做排序输出list
+                "sortorder": "ASC",  # 使用升序 用于图形展示
+                "time_from": time_from,
+                "time_till": time_till,
+                "limit": 60
+            },
+            "auth": token,
+            "id": 1
+        }
+        value = json.dumps(data)
+        try:
+            r = requests.post(url=self.url,data=value,headers=self.headers)
+            logs.info("获取items的历史数据：%s" % (r.json()))
+            return r.json()['result']
+        except:
+            logs.error("Error：%s" % (traceback.format_exc()))
+
+    
 
