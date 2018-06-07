@@ -10,8 +10,9 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField,StringField,PasswordField
 from wtforms.validators import DataRequired,ValidationError
+from app.models import Users
 
-class Login(FlaskForm):
+class LoginForm(FlaskForm):
     admin = StringField(
         label="管理员账号",
         validators=[
@@ -42,3 +43,10 @@ class Login(FlaskForm):
             "class":"xxx"
         }
     )
+
+    def validate_account(self,field):
+        account = field.data
+        admin = Users.query.filter_by(name=account).count()
+        if admin == 0:
+            raise ValidationError("账号不存在！")
+

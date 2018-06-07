@@ -8,17 +8,33 @@
 # @Contact : i@olei.me
 
 from app import app
-from flask import Flask, session,redirect,render_template
+from flask import Flask, session, redirect, render_template, flash, url_for, request
+from app.forms import LoginForm
+from app.models import Users
+from tools import login_require
 
 
-@app.route("/login/",methods=['GET','POST'])
+@login_require.login_message_req
+@app.route("/login/", methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        data = form.data
+        admin = Users.query.filter_by(name=data['admin']).first()
+        if not admin.check_pwd(data['pwd']):
+            flash("密码错误")
+            return redirect("/login/")
+        session['admin'] = data['admin']
+        return redirect(request.args.get("next") or url_for("/"))
+    return render_template('login.html', form=form)
 
-@app.route('/',methods=['GET','POST'])
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
     return redirect('/dashboard')
 
-@app.route('user/info',methods=['GET','POST'])
+
+@login_require.login_message_req
+@app.route('user/info', methods=['GET', 'POST'])
 def user_info():
     return render_template('user_info.html')
