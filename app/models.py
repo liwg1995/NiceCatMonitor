@@ -12,13 +12,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root@127.0.0.1:3306/zabbix'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.config['SECRET_KEY'] = '22e082448b7349eaacb8d30d375af71f'
-
-app.debug = True
-db = SQLAlchemy(app)
+from app import db
 
 
 class Users(db.Model):
