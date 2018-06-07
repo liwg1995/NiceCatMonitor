@@ -83,7 +83,7 @@ class zabbix():
                 "output": "extend",
                 "hostids": hostid,
                 "search": {
-                    "key_": key
+                    "key_": key_
                 },
                 "sortfield": "name"
             },
