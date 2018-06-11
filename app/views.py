@@ -22,11 +22,17 @@ def login():
         data = form.data
         admin = Users.query.filter_by(name=data['admin']).first()
         if not admin.check_pwd(data['pwd']):
-            flash("密码错误")
+            flash("密码错误","ok")
             return redirect("/login/")
         session['admin'] = data['admin']
         return redirect(request.args.get("next") or url_for("/"))
-    return render_template('login.html', form=form)
+    return render_template('login.html', title="登录",form=form)
+
+@login_require.login_message_req
+@app.route("logout",methods=['GET'])
+def logout():
+    session.pop('admin',None)
+    return redirect("/login/")
 
 
 @app.route('/', methods=['GET', 'POST'])
